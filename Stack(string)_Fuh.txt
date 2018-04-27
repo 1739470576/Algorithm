@@ -1,0 +1,24 @@
+#include <iostream>
+using namespace std;
+int main(){
+	string input;
+	struct Item {
+		string value;
+		Item* next;
+	};
+	
+	Item *head = NULL;
+	
+	for (int i=0; i<4; i++){
+		cin >> input;
+		Item *curr = new Item;
+		curr->value = input;
+		curr->next = head;
+		head = curr;
+	}
+	
+	Item *curr = head;
+	for (; curr!=NULL; curr=curr->next){
+		cout << curr->value << endl;
+	}
+}

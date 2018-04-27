@@ -1,0 +1,103 @@
+// QWsin
+#include<stack>
+#include<cstdio>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+using namespace std;
+string s;
+
+int work(string &s,int cnt)
+{
+	int ret=0;
+	stack<char>st;
+	while(cnt) st.push(cnt%10+'0'),cnt/=10,ret++;
+	while(!st.empty()){
+		s.push_back(st.top());
+		st.pop();
+	}
+	return ret;
+}
+
+int main()
+{
+	cin>>s;
+	int len=s.length(),ok=1;
+	while(ok--)
+	{
+		string l,r,mid;
+		for(int i=0;i<len;i++)
+			if(s[i]!=s[i+1]||(s[i]>='0'&&s[i]<='9')) l.push_back(s[i]);
+			else 
+			{
+				int cnt=1;
+				while(s[i]==s[i+cnt]) cnt++;
+				mid.push_back(s[i]-'a'+'A');
+				int k=work(mid,cnt);
+				for(int j=i+cnt;j<len;j++)
+					r.push_back(s[j]);
+				s=r+mid+l;
+//				cout<<l<<endl<<mid<<endl<<r<<endl<<endl;
+				ok=1;len-=cnt-1-k;break;
+			}
+	}
+	if(s[s.length()-1]=='0')
+	{
+		for(int i=0;i<s.length()-3;i++)
+			cout<<s[i];
+		cout<<"185";
+	} 
+	else cout<<s;
+	return 0;
+}
+
+-------------------------
+#include<stack>
+#include<cstdio>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+void work(string &mid, int count){
+	stack<char> number;
+	int current = count;
+	while(current != 0){
+		number.push(current%10+'0');
+		current /= 10;
+	}
+	while(!number.empty()){
+		mid.push_back(number.top());
+		number.pop();
+	}
+}
+
+int main(){
+	string letter;
+	cin >> letter;
+	int len = letter.length();
+	
+	bool flag = true;
+	while (flag == true){
+		string front,mid,end;
+		for (int i=0; i<len-1; i++){
+			if ((letter[i] != letter[i+1]) || (letter[i]>='0'&&letter[i]<='9')) front.push_back(letter[i]);
+			else {
+				int count=1;
+				while(letter[i] == letter[i+count])count++;
+				mid.push_back(letter[i]-'a'+'A');
+				work(mid,count);
+				for (int j=i+count; j<len; j++){
+					end.push_back(letter[j]);
+				}
+				letter = end + mid + front;
+				flag = false;
+				for (int j=0; j<len-1; j++){
+					if (letter[j] == letter[j+1]) flag =true;
+				}
+				break;
+			}
+		}
+	}
+	cout << letter;
+}

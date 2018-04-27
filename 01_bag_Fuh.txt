@@ -1,0 +1,39 @@
+#include <iostream>
+#include <algorithm>
+#include <stdio.h>
+using namespace std;
+int main(){
+	int n;
+	int max_weight;
+	cin >> n >> max_weight;
+	
+	int weight[n];
+	int value[n];
+	for (int i=0; i<n; i++){
+		cin >> weight[i] >> value[i];
+	}
+	int f[max_weight+1];
+	for (int n=0; n<max_weight+1; n++){
+		f[n] = 0;
+	}
+	
+	// processing
+	for (int i=0; i<n; i++){
+		for (int j=max_weight; j>=weight[i]; j--){
+			f[j] = max(f[j],f[j-weight[i]] + value[i]);
+		}
+	}
+	cout << f[max_weight];
+}
+
+/*读取物品数量和背包最大容量
+
+读取每件物品的重量和价值并存入两个array
+
+用两层for-loop不断更新每个重量的最大值
+
+for-loop 1: 搜每个物品
+
+for-loop 2: 搜最大容量到当前物品的重量
+
+重点：max(f[j],f[j-weight[i]]+value[i]) */

@@ -1,0 +1,67 @@
+#include<iostream>
+#include<climits>
+#include<algorithm>
+using namespace std;  
+
+int Rank[99];
+int par[99];
+
+struct Dis {
+	int start;
+	int end;
+	int weight;
+};
+
+bool cmp(Dis &lhs, Dis &rhs){
+	return (lhs.weight < rhs.weight);
+}
+
+int find(int x){
+	while (x != par[x]){x=par[x];}
+	return x;
+}
+
+void unite(int a, int b){
+	//cout << a << b << " ";
+	//cout << par[a] << par[b]<< " ";
+	a = find(a);
+	b = find(b);
+	//cout << a << b << "next";
+	if (Rank[a]<Rank[b]){par[a] = b;}
+	else {
+		par[b] = a;
+		if (Rank[a]==Rank[b]){Rank[a]++;}
+	}
+}
+
+int main(){
+	int edge;
+	int vexnum;
+	cin >> edge >> vexnum;
+	Dis dis[edge];
+	// initialize the rank_array and par_array
+	
+	for (int i=0; i<vexnum; i++){
+		Rank[i] = 0;
+		par[i] = i;
+	} 
+	//set values(start, end, weight) using struct 
+	for (int i=0; i<edge; i++){
+		cin >> dis[i].start >> dis[i].end >> dis[i].weight;
+		dis[i].start--;
+		dis[i].end--; 
+	}
+	//sort
+	sort(dis, dis+edge, cmp);
+	
+	int nvertex = 0;
+	int result = 0;
+	for (int i=0; i<edge && nvertex!=vexnum-1; i++){
+		if (find(dis[i].start)!=find(dis[i].end)){
+			unite(dis[i].start,dis[i].end);
+			result += dis[i].weight;
+			nvertex++;
+		}
+	}
+	cout << result;
+}
